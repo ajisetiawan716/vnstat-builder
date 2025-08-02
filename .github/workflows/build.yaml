@@ -1,0 +1,54 @@
+name: Build vnstat with TTF for armvirt/64
+
+on:
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    env:
+      TARGET: armvirt/64
+      TARGETS: armvirt-64
+      PROFILE: aarch64_cortex-a53
+      VERSION: 22.03.3
+
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v4
+
+    - name: Install dependencies
+      run: |
+        sudo apt update
+        sudo apt install -y build-essential libncurses5-dev zlib1g-dev gawk gettext libssl-dev xsltproc libxml-parser-perl git subversion wget unzip python3
+
+    - name: Download and extract OpenWrt SDK
+      run: |
+        wget https://downloads.openwrt.org/releases/${{ env.VERSION }}/targets/${{ env.TARGET }}/openwrt-sdk-${{ env.VERSION }}-${{ env.TARGETS }}_gcc-11.2.0_musl.Linux-x86_64.tar.xz
+        tar -xf openwrt-sdk-${{ env.VERSION }}-${{ env.TARGETS }}_gcc-11.2.0_musl.Linux-x86_64.tar.xz
+        mv openwrt-sdk-${{ env.VERSION }}-${{ env.TARGETS }}* openwrt-sdk
+
+    - name: Prepare SDK and install packages feed
+      run: |
+        cd openwrt-sdk
+        echo "src-git packages https://github.com/openwrt/packages.git" > feeds.conf.default
+        ./scripts/feeds update packages
+        ./scripts/feeds install vnstat
+
+    - name: Enable freetype in vnstat Makefile
+      run: |
+        cd openwrt-sdk/package/feeds/packages/vnstat
+        sed -i 's/DEPENDS:=/DEPENDS:=+libgd +freetype /' Makefile
+        sed -i '/CONFIGURE_ARGS/ a\ \ \ \ --enable-freetype \\' Makefile
+
+    - name: Build vnstat package
+      run: |
+        cd openwrt-sdk
+        make defconfig
+        make package/vnstat/compile V=s
+
+    - name: Upload compiled vnstat IPK
+      uses: actions/upload-artifact@v4
+      with:
+        name: vnstat-ipk-armvirt64
+        path: openwrt-sdk/bin/packages/*/*/vnstat_*.ipk
