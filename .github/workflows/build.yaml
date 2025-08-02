@@ -30,7 +30,6 @@ jobs:
 
     - name: Prepare SDK and install packages feed
       run: |
-        cd openwrt-sdk
         echo "src-git packages https://github.com/openwrt/packages.git" > feeds.conf.default
         ./scripts/feeds update packages
         ./scripts/feeds install vnstat
