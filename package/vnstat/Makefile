@@ -22,18 +22,26 @@ PKG_FIXUP:=autoreconf
 
 include $(INCLUDE_DIR)/package.mk
 
+# ✅ Tambahkan dependensi host
+HOST_BUILD_DEPENDS:=zlib/host
+
 define Package/vnstat
   SECTION:=net
   CATEGORY:=Network
   TITLE:=Network traffic monitor
   URL:=https://humdi.net/vnstat/
-  DEPENDS:=+libpthread +libsqlite3 +libpng +zlib
+  DEPENDS:=+libpthread +libsqlite3 +libpng +zlib +freetype +libgd
 endef
 
 define Package/vnstat/description
   vnStat is a console-based network traffic monitor.
 endef
 
+define Package/vnstat/install
+	$(MAKE) -C $(PKG_BUILD_DIR) DESTDIR=$(1) install
+endef
+
+$(eval $(call BuildPackage,vnstat))
 define Package/vnstat/install
 	$(MAKE) -C $(PKG_BUILD_DIR) DESTDIR=$(1) install
 endef
