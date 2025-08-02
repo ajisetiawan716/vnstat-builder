@@ -40,10 +40,17 @@ jobs:
         cd openwrt-sdk/package/feeds/packages/vnstat
         sed -i 's/DEPENDS:=/DEPENDS:=+libgd +freetype /' Makefile
         sed -i '/CONFIGURE_ARGS/ a\ \ \ \ --enable-freetype \\' Makefile
-
+    
+    - name: Inject custom vnstat package
+        run: |
+          mkdir -p openwrt-sdk/package/vnstat
+          cp -r package/vnstat/* openwrt-sdk/package/vnstat/
+          
     - name: Build vnstat package
       run: |
         cd openwrt-sdk
+          ./scripts/feeds update -a
+          ./scripts/feeds install -a
         make defconfig
         make package/vnstat/compile V=s
 
