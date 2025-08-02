@@ -8,7 +8,7 @@ jobs:
     runs-on: ubuntu-latest
 
     env:
-      TARGET: armvirt/64
+      TARGET: armvirt-64
       PROFILE: aarch64_cortex-a53
       VERSION: 22.03.3
 
