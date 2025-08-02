@@ -45,6 +45,12 @@ jobs:
       run: |
         cp -r package/vnstat openwrt-sdk/package/vnstat || true
     
+    - name: Prebuild zlib & libpng
+      run: |
+       cd openwrt-sdk
+       make package/zlib/compile V=s
+       make package/libpng/compile V=s
+    
     - name: Build vnstat package
       run: |
         cd openwrt-sdk
