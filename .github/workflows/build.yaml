@@ -42,7 +42,7 @@ jobs:
     
     - name: Inject custom vnstat package
         run: |
-          ls -l openwrt-sdk
+          ls -l
           cd openwrt-sdk
           mkdir -p openwrt-sdk/package/vnstat
           cp -r package/vnstat/* openwrt-sdk/package/vnstat/
