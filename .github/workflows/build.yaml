@@ -42,10 +42,10 @@ jobs:
         sed -i '/CONFIGURE_ARGS/ a\ \ \ \ --enable-freetype \\' Makefile
     
     - name: Inject custom vnstat package
-        run: |
-          cd openwrt-sdk
-          mkdir -p openwrt-sdk/package/vnstat
-          cp -r package/vnstat/* openwrt-sdk/package/vnstat/
+      run: |
+        cd openwrt-sdk
+        mkdir -p openwrt-sdk/package/vnstat
+        cp -r package/vnstat/* openwrt-sdk/package/vnstat/
           
     - name: Build vnstat package
       run: |
