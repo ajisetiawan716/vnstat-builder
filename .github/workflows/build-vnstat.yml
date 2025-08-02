@@ -24,7 +24,7 @@ jobs:
 
     - name: Download SDK
       run: |
-        wget https://downloads.openwrt.org/releases/${{ env.VERSION }}/targets/${{ env.TARGET }}/openwrt-sdk-${{ env.VERSION }}-${{ env.TARGET }}_gcc-11.2.0_musl.Linux-x86_64.tar.xz
+        wget https://downloads.openwrt.org/releases/${{ env.VERSION }}/targets/${{ env.TARGET }}/openwrt-sdk-${{ env.VERSION }}-${{ env.TARGETS }}_gcc-11.2.0_musl.Linux-x86_64.tar.xz
         tar -xf openwrt-sdk-${{ env.VERSION }}-${{ env.TARGETS }}_gcc-11.2.0_musl.Linux-x86_64.tar.xz
         mv openwrt-sdk-${{ env.VERSION }}-${{ env.TARGETS }}* openwrt-sdk
         cd openwrt-sdk
